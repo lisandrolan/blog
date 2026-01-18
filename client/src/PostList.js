@@ -3,11 +3,11 @@ import axios from "axios";
 import CommentCreate from "./CommentCreate";
 import CommentList from "./CommentList";
 
-export default () => {
+const PostList = () => {
     const [posts, setPosts] = useState({});
 
     const fetchPosts = async () => {
-        const res = await axios.get("http://localhost:4000/posts");
+        const res = await axios.get("http://localhost:4002/posts");
         setPosts(res.data);
     };
 
@@ -16,12 +16,13 @@ export default () => {
     }, []);
 
     const renderedPosts = Object.values(posts).map((post) => {
+        const postComments = post.comments || [];
         return (
             <div className="card" key={post.id} style={{ width: '30%', marginBottom: '20px' }}>
                 <div className="card-body">
                     <h3 className="card-title">{post.title}</h3>
 
-                    <CommentList postId={post.id} />
+                    <CommentList comments={postComments} />
                     <CommentCreate postId={post.id} />
                 </div>
             </div>
@@ -34,3 +35,5 @@ export default () => {
         </div>
     );
 }   
+
+export default PostList;
