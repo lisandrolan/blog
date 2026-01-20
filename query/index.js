@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import cors from "cors";
+import axios from "axios";
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,37 +16,47 @@ app.get('/posts', (req, res) => {
 app.post('/events', (req, res) => {
     console.log('Received Event:', req.body.type);
 
-    if (req.body.type === 'PostCreated') {
-        const { id, title } = req.body.data;
-        posts[id] = { id, title };
-    }
-    else if (req.body.type === 'CommentCreated') {
-        console.log('Processing CommentCreated event');
-        console.log("Event Data:", req.body.data);
-        const { id, content, postId, status } = req.body.data;
-        
-        const post = posts[postId];
-        
-        if (post) {
-            post.comments = post.comments || [];
-            post.comments.push({ id, content, status });
-        }
-    }
-    else if (req.body.type === 'CommentUpdated') {
-        const { id, postId, status, content } = req.body.data;
-        const post = posts[postId];
-        if (post && post.comments) {
-            const comment = post.comments.find(comment => comment.id === id);
-            if (comment) {
-                comment.status = status;
-            }
-        }
-    }
+    handleEvent(req.body.type, req.body.data);
 
     res.send({});
 });
 
+const handleEvent = (type, data) => {
+    if (type === 'PostCreated') {
+        const { id, title } = data;
+        posts[id] = { id, title, comments: [] };
+    }
+
+    if (type === 'CommentCreated') {
+        const { id, content, postId, status } = data;
+        const post = posts[postId];
+        post.comments.push({ id, content, status });
+    }
+
+    if (type === 'CommentUpdated') {
+        const { id, content, postId, status } = data;
+        const post = posts[postId];
+        const comment = post.comments.find(comment => comment.id === id);
+        comment.status = status;
+        comment.content = content;
+    }
+};
+
+
 const PORT = 4002;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Posts service listening on port ${PORT}`);
+
+    try {
+        
+        const res = await axios.get('http://localhost:4005/events');
+
+        console.log('Fetching past events:', res.data.length);
+        for (let event of res.data) {
+            console.log('Processing event:', event.type);
+            handleEvent(event.type, event.data);
+        }
+    } catch (error) {
+        console.log('Error fetching events:', error.message);
+    }
 });

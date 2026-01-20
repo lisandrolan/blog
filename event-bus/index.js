@@ -5,22 +5,31 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 4005;
 
+const eventLog = [];
+
 app.use(bodyParser.json());
 
 app.post('/events', async (req, res) => {
     const event = req.body;
 
+    eventLog.push(event);
     try {
-        await axios.post('http://localhost:4000/events', event);
-        await axios.post('http://localhost:4001/events', event);
-        await axios.post('http://localhost:4002/events', event);
-        await axios.post('http://localhost:4003/events', event);
+        await axios.post('http://localhost:4000/events', event).catch(() => {}); 
+        await axios.post('http://localhost:4001/events', event).catch(() => {});
+        await axios.post('http://localhost:4002/events', event).catch(() => {});
+        await axios.post('http://localhost:4003/events', event).catch(() => {});
         console.log('Event forwarded:', event.type);
         res.status(200).send({ status: 'Event forwarded successfully' });
     } catch (error) {
-        console.error('Error forwarding event:', error);
-        res.status(500).send({ status: 'Error forwarding event' });
+        // console.error('Error forwarding event:', error);
+        // res.status(500).send({ status: 'Error forwarding event' });
     }
+});
+
+app.get('/events', (req, res) => {
+    console.log('Event log requested');
+    console.log(eventLog);
+    res.send(eventLog);
 });
 
 app.listen(PORT, () => {
