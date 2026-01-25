@@ -14,10 +14,10 @@ app.post('/events', async (req, res) => {
 
     eventLog.push(event);
     try {
-        await axios.post('http://localhost:4000/events', event).catch(() => {}); 
-        await axios.post('http://localhost:4001/events', event).catch(() => {});
-        await axios.post('http://localhost:4002/events', event).catch(() => {});
-        await axios.post('http://localhost:4003/events', event).catch(() => {});
+        await axios.post('http://blog-posts-srv:4000/events', event).catch(() => {}); 
+            await axios.post('http://blog-comments-srv:4001/events', event).catch(() => {});
+            await axios.post('http://blog-moderation-srv:4002/events', event).catch(() => {});
+            await axios.post('http://blog-query-srv:4003/events', event).catch(() => {});
         console.log('Event forwarded:', event.type);
         res.status(200).send({ status: 'Event forwarded successfully' });
     } catch (error) {

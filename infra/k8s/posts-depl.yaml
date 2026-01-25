@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-posts
+  template:
+    metadata:
+      labels:
+        app: blog-posts
+    spec:
+      containers:
+      - name: posts
+        image: lisandrolan/blog-posts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-posts-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: blog-posts
+  ports:
+    - name: posts-port
+      protocol: TCP
+      port: 4000  
+      targetPort: 4000

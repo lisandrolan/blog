@@ -48,8 +48,8 @@ app.listen(PORT, async () => {
     console.log(`Posts service listening on port ${PORT}`);
 
     try {
-        
-        const res = await axios.get('http://localhost:4005/events');
+
+        const res = await axios.get('http://blog-event-bus-srv:4005/events');
 
         console.log('Fetching past events:', res.data.length);
         for (let event of res.data) {

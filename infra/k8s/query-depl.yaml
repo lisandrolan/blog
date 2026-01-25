@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-query-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-query
+  template:
+    metadata:
+      labels:
+        app: blog-query
+    spec:
+      containers:
+      - name: query 
+        image: lisandrolan/blog-query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-query-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: blog-query
+  ports:
+    - name: query-port
+      protocol: TCP
+      port: 4003  
+      targetPort: 4003
