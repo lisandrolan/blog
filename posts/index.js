@@ -17,7 +17,7 @@ app.get('/posts', (req, res) => {
   res.send(posts);
 });
 
-app.post('/posts', async (req, res) => {
+app.post('/posts/create', async (req, res) => {
   const newPost = {
     id: randomBytes(4).toString('hex'),
     title: req.body.title
@@ -41,5 +41,5 @@ app.post('/events', (req, res) => {
 
 app.listen(port, () => {
   console.log('Post service is running on port', port);
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://posts.com:${port}`);
 });

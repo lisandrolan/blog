@@ -21,7 +21,7 @@ kind: Service
 metadata:
   name: blog-posts-srv
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: blog-posts
   ports:

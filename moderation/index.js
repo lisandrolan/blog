@@ -32,7 +32,7 @@ app.post('/events', async (req, res) => {
     res.send({});
 });
 
-const PORT = 4003;
+const PORT = 4002;
 app.listen(PORT, () => {
     console.log(`Moderation service listening on port ${PORT}`);
 });

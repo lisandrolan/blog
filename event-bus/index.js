@@ -17,9 +17,9 @@ app.post('/events', async (req, res) => {
         await axios.post('http://blog-posts-srv:4000/events', event).catch(() => {}); 
             await axios.post('http://blog-comments-srv:4001/events', event).catch(() => {});
             await axios.post('http://blog-moderation-srv:4002/events', event).catch(() => {});
-            await axios.post('http://blog-query-srv:4003/events', event).catch(() => {});
+            await axios.post('http://blog-query-srv:4002/events', event).catch(() => {});
         console.log('Event forwarded:', event.type);
-        res.status(200).send({ status: 'Event forwarded successfully' });
+        res.status(200).send({ status: 'Event forwarded  successfully' });
     } catch (error) {
         // console.error('Error forwarding event:', error);
         // res.status(500).send({ status: 'Error forwarding event' });

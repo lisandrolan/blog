@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blog-query-depl
+  name: blog-client-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: blog-query
+      app: blog-client
   template:
     metadata:
       labels:
-        app: blog-query
+        app: blog-client
     spec:
       containers:
-      - name: query 
-        image: lisandrolan/blog-query
+      - name: client
+        image: lisandrolan/blog-client
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: blog-query-srv
+  name: blog-client-srv
 spec:
   type: LoadBalancer
   selector:
-    app: blog-query
+    app: blog-client
   ports:
-    - name: query-port
+    - name: comments-port
       protocol: TCP
-      port: 4002  
-      targetPort: 4002
+      port: 3000  
+      targetPort: 3000

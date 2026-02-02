@@ -60,7 +60,7 @@ app.post('/events', async (req, res) => {
                 status
             }
         }).catch((err) => {
-            console.log('Error sending event:', err.message);
+            console.log('Error sending event :', err.message);
         });
 
     }
